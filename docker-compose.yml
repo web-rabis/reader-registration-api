@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  nlrk-reader-registration-api:
+    container_name: nlrk-reader-registration-api
+    image: shaisarov/nlrk-reader-registration-api
+    restart: unless-stopped
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    ports:
+      - "8595:8595"
+    environment:
+      - LISTEN=:8595
+      - DEBUG=1
+      - READER_GRPC_ADDRESS=nlrk-reader:8906
+      - READER_TYPE_CARD=399
+      - BASE_PATH=/
+    networks:
+      - web_rabis_network
+networks:
+  web_rabis_network:
+    external: true

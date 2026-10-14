@@ -1,0 +1,629 @@
+basePath: /
+definitions:
+  github_com_web-rabis_httperrors.Details:
+    properties:
+      code:
+        description: application-определенный код ошибки
+        type: integer
+      message:
+        description: application-level сообщение, для дебага
+        type: string
+      status:
+        description: сообщение пользовательского уровня
+        type: string
+    type: object
+  github_com_web-rabis_httperrors.Response:
+    properties:
+      error:
+        $ref: '#/definitions/github_com_web-rabis_httperrors.Details'
+      validation:
+        additionalProperties:
+          type: string
+        description: ошибки валидации
+        type: object
+    type: object
+  github_com_web-rabis_reader-client_model.Dictionary:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  github_com_web-rabis_reader-client_model.SocialStatus:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  github_com_web-rabis_reader-client_model.TypeCard:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      instagram:
+        type: string
+      isTerm:
+        type: boolean
+      photo:
+        items:
+          type: integer
+        type: array
+      photoTitle:
+        items:
+          type: integer
+        type: array
+      type:
+        type: string
+      web:
+        type: string
+    type: object
+  github_com_web-rabis_reader-registration-api_internal_model.ListResponse:
+    properties:
+      count:
+        type: integer
+      result: {}
+    type: object
+  github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.DEducation:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      translations:
+        $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.LangOptions'
+    type: object
+  github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.DSex:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      translations:
+        $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.LangOptions'
+    type: object
+  github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.LangOptions:
+    properties:
+      en:
+        type: string
+      kz:
+        type: string
+      ru:
+        type: string
+    type: object
+  github_com_web-rabis_reader-registration-api_internal_resource_http_reader_v1_dto.RegistrationReaderUserRequest:
+    properties:
+      academicDegree:
+        type: integer
+      address:
+        type: string
+      birthDate:
+        type: string
+      course:
+        type: string
+      education:
+        type: integer
+      email:
+        type: string
+      faculty:
+        type: integer
+      firstname:
+        type: string
+      iin:
+        type: string
+      institution:
+        type: integer
+      lastname:
+        type: string
+      middlename:
+        type: string
+      nationality:
+        type: integer
+      phone:
+        type: string
+      photo:
+        type: string
+      position:
+        type: string
+      sex:
+        type: integer
+      socialStatus:
+        type: integer
+      speciality:
+        type: integer
+      workPhone:
+        type: string
+      workPlace:
+        type: string
+    type: object
+  github_com_web-rabis_reader-registration-api_internal_resource_http_reader_v1_dto.RegistrationReaderUserResponse:
+    properties:
+      status:
+        type: string
+      ticketNumber:
+        type: integer
+    type: object
+  internal_resource_http.HealthResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  internal_resource_http.VersionResponse:
+    properties:
+      api:
+        type: string
+      version:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Pay System Admin API
+  title: Reader Registration API
+  version: "1.0"
+paths:
+  /api/v1/dictionary/academic-degree:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Academic Degree
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.Dictionary'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Academic Degree
+      tags:
+      - Dictionary
+  /api/v1/dictionary/education:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Education
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.DEducation'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Education
+      tags:
+      - Dictionary
+  /api/v1/dictionary/faculty:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Faculty
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.Dictionary'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Faculty
+      tags:
+      - Dictionary
+  /api/v1/dictionary/institution:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Institution
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.Dictionary'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Institution
+      tags:
+      - Dictionary
+  /api/v1/dictionary/nationality:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Nationality
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.Dictionary'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Nationality
+      tags:
+      - Dictionary
+  /api/v1/dictionary/sex:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Sex
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_resource_http_dictionary_v1_dto.DSex'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Sex
+      tags:
+      - Dictionary
+  /api/v1/dictionary/social-status:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Social Status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.SocialStatus'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Social Status
+      tags:
+      - Dictionary
+  /api/v1/dictionary/speciality:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Speciality
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.Dictionary'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Speciality
+      tags:
+      - Dictionary
+  /api/v1/dictionary/type-card:
+    get:
+      consumes:
+      - application/json
+      description: Dictionary Type Card
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_model.ListResponse'
+            - properties:
+                result:
+                  items:
+                    $ref: '#/definitions/github_com_web-rabis_reader-client_model.TypeCard'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Dictionary Type Card
+      tags:
+      - Dictionary
+  /api/v1/reader/registration:
+    post:
+      consumes:
+      - application/json
+      description: Create Reader User
+      parameters:
+      - description: Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_resource_http_reader_v1_dto.RegistrationReaderUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_reader-registration-api_internal_resource_http_reader_v1_dto.RegistrationReaderUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Create Reader User
+      tags:
+      - ReaderUser
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Check that the service and its reader grpc-backend dependency are
+        operational
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_resource_http.HealthResponse'
+        "503":
+          description: Service Unavailable
+          schema:
+            $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
+      summary: Health check
+      tags:
+      - Health
+  /version:
+    get:
+      consumes:
+      - application/json
+      description: Get API and application version
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_resource_http.VersionResponse'
+      summary: Version
+      tags:
+      - Version
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

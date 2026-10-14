@@ -1,0 +1,78 @@
+syntax = "proto3";
+package reader;
+option go_package = "./protobuf;protobuf";
+import "google/protobuf/timestamp.proto";
+
+message Reader {
+  int64 ticket_number = 1;
+  string rfid = 2;
+  string barcode = 3;
+  optional TypeCard type_card = 4;
+  optional google.protobuf.Timestamp registration_date = 5;
+  optional google.protobuf.Timestamp reregistration_date = 6;
+  optional google.protobuf.Timestamp expiration_date = 7;
+  optional google.protobuf.Timestamp last_visit_date = 8;
+  optional google.protobuf.Timestamp date_correction = 9;
+  string readers_hall =10;
+  string status = 11;
+  string branch_id = 12;
+  string iin = 13;
+  string firstname = 14;
+  string middlename = 15;
+  string lastname = 16;
+  int64 year_birth = 17;
+  optional google.protobuf.Timestamp birth_date = 18;
+  optional Dictionary sex = 19;
+  optional SocialStatus social_status = 20;
+  optional Dictionary nationality = 21;
+  optional Dictionary speciality = 22;
+  string address = 23;
+  string email = 24;
+  string phone = 25;
+  string work_phone = 26;
+  optional Dictionary education = 27;
+  string place_employment = 28;
+  string position = 29;
+  optional Dictionary institution = 30;
+  optional Dictionary academic_degree = 31;
+  string course = 32;
+  optional Dictionary faculty = 33;
+  string note = 34;
+  string priznak_udal = 35;
+  string department = 36;
+  bool is_employee = 37;
+}
+message Dictionary {
+  int64 id = 1;
+  string name = 2;
+}
+message SocialStatus {
+  int64 id = 1;
+  string code = 2;
+  string name = 3;
+}
+message TypeCard {
+  int64 id = 1;
+  string type = 2;
+  string code = 3;
+  string web = 4;
+  string email = 5;
+  string instagram = 6;
+  bool is_term = 7;
+  bytes photo = 8;
+  bytes photo_title = 9;
+}
+message Paging {
+  int64   offset = 1;
+  int64   limit = 2;
+  string  sortKey = 3;
+  int32   sortVal = 4;
+}
+message ReaderFilter {
+  string status = 1;
+  string query = 2;
+  string iin = 3;
+  optional google.protobuf.Timestamp expiration_date_low  = 4;
+  optional google.protobuf.Timestamp expiration_date_high = 5;
+  optional bool is_employee = 6;
+}
