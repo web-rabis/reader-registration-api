@@ -24,7 +24,7 @@ RUN addgroup -S reader && adduser -S reader -G reader
 # копируем документацию
 RUN mkdir -p /usr/share/reader-registration-api
 COPY --from=builder /go/src/github.com/web-rabis/reader-registration-api/api /usr/share/api
-RUN chown -R reader:reader /usr/share/reader
+RUN chown -R reader:reader /usr/share/reader-registration-api
 
 ENTRYPOINT [ "/bin/reader-registration-api" ]
 
