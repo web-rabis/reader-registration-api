@@ -629,7 +629,7 @@ const docTemplate = `{
         },
         "/api/v1/reader/registration": {
             "post": {
-                "description": "Create Reader User",
+                "description": "Registration reader",
                 "consumes": [
                     "application/json"
                 ],
@@ -637,9 +637,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ReaderUser"
+                    "Reader"
                 ],
-                "summary": "Create Reader User",
+                "summary": "Registration reader",
                 "parameters": [
                     {
                         "description": "Request",

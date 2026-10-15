@@ -548,7 +548,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create Reader User
+      description: Registration reader
       parameters:
       - description: Request
         in: body
@@ -583,9 +583,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/github_com_web-rabis_httperrors.Response'
-      summary: Create Reader User
+      summary: Registration reader
       tags:
-      - ReaderUser
+      - Reader
   /health:
     get:
       consumes:
