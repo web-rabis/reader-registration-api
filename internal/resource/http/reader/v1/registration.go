@@ -11,11 +11,11 @@ import (
 	"github.com/web-rabis/reader-registration-api/internal/utils"
 )
 
-// @Summary Create Reader User
-// @Description Create Reader User
+// @Summary Registration reader
+// @Description Registration reader
 // @Accept json
 // @Produce json
-// @Tags ReaderUser
+// @Tags Reader
 // @Param body body dto.RegistrationReaderUserRequest true "Request"
 // @Success 200 {object} dto.RegistrationReaderUserResponse
 // @Failure 400 {object} httperrors.Response
