@@ -35,7 +35,7 @@ type RegistrationReaderUserRequest struct {
 
 type RegistrationReaderUserResponse struct {
 	TicketNumber int64  `json:"ticketNumber"`
-	Status       string `json:"status"`
+	Status       string `json:"status"` // "pending" | "active" | "rejected"
 }
 
 func (r *RegistrationReaderUserRequest) Validate() error {
@@ -88,13 +88,21 @@ func (r *RegistrationReaderUserRequest) Validate() error {
 	}
 	return nil
 }
-func (r *RegistrationReaderUserRequest) ReaderRegistrationRequest(typeCardId int64, photo []byte) (*rcmodel.ReaderRegistrationRequest, error) {
+
+// PhotoKey тут не проставляем - фото загружается в MinIO/S3 и ссылка
+// проставляется в manager/reader.Manager.ReaderRegistration (байты туда
+// передаются отдельным параметром, в обход этого DTO).
+//
+// TypeCard не передаём: раньше тут был один статический READER_TYPE_CARD
+// на весь сервис - неверно для общего на все библиотеки reader-sервиса.
+// Правильный, per-библиотечный дефолт типа билета резолвится позже,
+// при одобрении заявки (см. ReaderApprove в reader).
+func (r *RegistrationReaderUserRequest) ReaderRegistrationRequest() (*rcmodel.ReaderRegistrationRequest, error) {
 	birthDate, err := time.Parse("2006-01-02", r.BirthDate)
 	if err != nil {
 		return nil, err
 	}
 	return &rcmodel.ReaderRegistrationRequest{
-		TypeCard:       &typeCardId,
 		Iin:            r.Iin,
 		Firstname:      r.Firstname,
 		Middlename:     r.Middlename,
@@ -115,7 +123,6 @@ func (r *RegistrationReaderUserRequest) ReaderRegistrationRequest(typeCardId int
 		Nationality:    dictId(r.Nationality),
 		SocialStatus:   dictId(r.SocialStatus),
 		Sex:            dictId(r.Sex),
-		Photo:          photo,
 	}, nil
 }
 func dictId(id *int64) *int64 {

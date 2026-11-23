@@ -3,13 +3,30 @@ package reader;
 option go_package = "./protobuf;protobuf";
 import "protobuf/reader_model.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 service ReaderSvc {
-  rpc ReaderByTicketNumber(ReaderByTicketNumberRequest) returns (Reader) {}
+  rpc ReaderByTicketNumber(ByTicketNumberRequest) returns (Reader) {}
+  rpc ReaderByGlobalTicketNumber(ByGlobalTicketNumberRequest) returns (Reader) {}
+  rpc ReaderByBarcode(ByBarcodeRequest) returns (Reader) {}
   rpc ReaderList(ReaderListRequest) returns (ReaderListResponse) {}
-  rpc ReaderRegistration(ReaderRegistrationRequest) returns (ReaderRegistrationResponse) {}
-}
 
+  rpc ReaderRegistration(ReaderRegistrationRequest) returns (ReaderRegistrationResponse) {}
+
+  rpc ReaderCreate(ReaderCreateRequest) returns (ReaderCreateResponse) {}
+  rpc ReaderUpdate(ReaderUpdateRequest) returns (google.protobuf.Empty) {}
+  rpc ReaderDelete(ReaderDeleteRequest) returns (google.protobuf.Empty) {}
+
+  rpc ReaderApprove(ReaderApproveRequest) returns (ReaderApproveResponse) {}
+  rpc ReaderReject(ReaderRejectRequest) returns (google.protobuf.Empty) {}
+  rpc ReaderRenewalRegistration(ReaderRenewalRegistrationRequest) returns (google.protobuf.Empty) {}
+}
+service VisitSvc {
+  rpc VisitCheckIn(VisitCheckInRequest) returns (google.protobuf.Empty) {}
+  rpc VisitCheckOut(VisitCheckOutRequest) returns (google.protobuf.Empty) {}
+  rpc VisitList(VisitListRequest) returns (VisitListResponse) {}
+
+}
 service DictionarySvc {
   rpc AcademicDegreeList(DictionaryListRequest) returns (DictionaryListResponse) {}
   rpc EducationList(DictionaryListRequest) returns (DictionaryListResponse) {}
@@ -20,13 +37,20 @@ service DictionarySvc {
   rpc SocialStatusList(SocialStatusListRequest) returns (SocialStatusListResponse) {}
   rpc SpecialityList(DictionaryListRequest) returns (DictionaryListResponse) {}
   rpc TypeCardList(TypeCardListRequest) returns (TypeCardListResponse) {}
+  rpc TypeCardById(EntityByIdRequest) returns (TypeCard) {}
 }
 
 message EntityByIdRequest {
   int64 id = 1;
 }
-message ReaderByTicketNumberRequest{
+message ByTicketNumberRequest{
   int64 ticket_number = 1;
+}
+message ByGlobalTicketNumberRequest{
+  int64 global_ticket_number = 1;
+}
+message ByBarcodeRequest{
+  string barcode = 1;
 }
 message ReaderListRequest {
   optional ReaderFilter filters = 1;
@@ -58,11 +82,78 @@ message ReaderRegistrationRequest  {
   string position = 19;
   string work_phone = 20;
   optional int64 academic_degree = 21;
-  bytes photo = 22;
+  string photo_key = 22;
 }
 message ReaderRegistrationResponse  {
   int64 ticket_number = 1;
+  // "pending" - новая заявка (или уже была pending-заявка у этого Iin);
+  // "active" - уже одобренный читатель, дубликат не создан;
+  // "rejected" - прошлая заявка была отклонена (новую не создаём).
   string status = 2;
+}
+// user_id - id сотрудника, выполняющего действие (для reader_audit в
+// reader-service, см. migrations/000001_init.up.sql); 0 - действие без
+// участия сотрудника.
+message ReaderCreateRequest {
+  Reader reader = 1;
+  int64 user_id = 2;
+}
+message ReaderCreateResponse {
+  int64 ticket_number = 1;
+}
+message ReaderUpdateRequest {
+  Reader reader = 1;
+  int64 user_id = 2;
+}
+message ReaderDeleteRequest {
+  int64 ticket_number = 1;
+  int64 user_id = 2;
+}
+message ReaderApproveRequest {
+  int64 ticket_number = 1;
+  int64 user_id = 2;
+}
+message ReaderApproveResponse {
+  int64 old_ticket_number = 1;
+  int64 ticket_number = 2;
+  string barcode = 3;
+  // "active" - Approve переводит читателя из "pending" в "active"
+  // (см. manager.Approve в reader-service).
+  string status = 4;
+  google.protobuf.Timestamp expirationD_date = 5;
+}
+message ReaderRejectRequest {
+  int64 ticket_number = 1;
+  int64 user_id = 2;
+}
+message ReaderRenewalRegistrationRequest {
+  int64 ticket_number = 1;
+  int32 years = 2;
+  int32 months = 3;
+  int32 days = 4;
+  int64 user_id = 5;
+}
+// branch_id/department_id теперь приходят через grpc-metadata (tenant-
+// контекст вызывающего сервиса, см. reader-client/tenant.go), а не в
+// теле сообщения - поле department убрано.
+message VisitCheckInRequest {
+  int64 ticket_number = 1;
+  User user = 2;
+}
+message VisitCheckOutRequest {
+  reserved 3; // orders_count - нигде не читалось (visit больше не хранит
+              // метрики по заказам, см. migrations/000001_init.up.sql)
+  reserved "orders_count";
+  int64 ticket_number = 1;
+  User user = 2;
+}
+message VisitListRequest {
+  VisitFilter filters = 1;
+  Paging paging = 2;
+}
+message VisitListResponse {
+  repeated Visit result = 1;
+  int64 count = 2;
 }
 message DictionaryListRequest {
   Paging paging = 1;

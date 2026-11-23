@@ -7,16 +7,14 @@ import (
 )
 
 type Resource struct {
-	path           string
-	readerMan      reader.IManager
-	readerTypeCard int64
+	path      string
+	readerMan reader.IManager
 }
 
-func NewReaderResource(basePath string, readerTypeCard int64, readerMan reader.IManager) *Resource {
+func NewReaderResource(basePath string, readerMan reader.IManager) *Resource {
 	return &Resource{
-		path:           basePath,
-		readerMan:      readerMan,
-		readerTypeCard: readerTypeCard,
+		path:      basePath,
+		readerMan: readerMan,
 	}
 }
 

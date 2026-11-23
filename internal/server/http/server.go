@@ -34,7 +34,7 @@ func Run(serversCtx context.Context, opts *config.APIServer,
 		swaggerV1.NewSwaggerResource("/swagger", opts.BasePath, "/files"),
 
 		dictionaryV1.NewDictionaryResource("/api/v1/dictionary", dictMan),
-		readerV1.NewReaderResource("/api/v1/reader", opts.ReaderConfig.TypeCard, readerMan),
+		readerV1.NewReaderResource("/api/v1/reader", readerMan),
 	}
 	httpSrv := cherver.New(
 		cherver.WithListenAddress(opts.ServerConfig.ListenAddr),

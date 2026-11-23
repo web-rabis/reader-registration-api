@@ -16,6 +16,7 @@ type BaseClient struct {
 
 	readerSvc     client.ReaderService
 	dictionarySvc client.DictionaryService
+	visitSvc      client.VisitService
 }
 
 var _ client.Base = &BaseClient{}
@@ -49,7 +50,6 @@ func (c *BaseClient) ReaderSvc() client.ReaderService {
 	if c.readerSvc == nil {
 		c.readerSvc = NewReaderServiceClient(protobuf.NewReaderSvcClient(c.conn))
 	}
-
 	return c.readerSvc
 }
 
@@ -57,6 +57,12 @@ func (c *BaseClient) DictionarySvc() client.DictionaryService {
 	if c.dictionarySvc == nil {
 		c.dictionarySvc = NewDictionaryServiceClient(protobuf.NewDictionarySvcClient(c.conn))
 	}
-
 	return c.dictionarySvc
+}
+
+func (c *BaseClient) VisitSvc() client.VisitService {
+	if c.visitSvc == nil {
+		c.visitSvc = NewVisitServiceClient(protobuf.NewVisitSvcClient(c.conn))
+	}
+	return c.visitSvc
 }

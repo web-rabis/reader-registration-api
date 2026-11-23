@@ -28,7 +28,13 @@ type GeneralConfig struct {
 }
 type ReaderConfig struct {
 	GrpcAddress string `long:"reader-grpc-address" env:"READER_GRPC_ADDRESS" description:"Reader Grpc Address (format: :4000|127.0.0.1:4000)" required:"false" default:":4000"`
-	TypeCard    int64  `long:"reader-type-card" env:"READER_TYPE_CARD" description:"Reader type card" required:"false" default:"130"`
+}
+type StorageConfig struct {
+	Endpoint  string `long:"storage-endpoint" env:"STORAGE_ENDPOINT" description:"MinIO/S3 endpoint (host:port, no scheme)" required:"false" default:"localhost:9000"`
+	AccessKey string `long:"storage-access-key" env:"STORAGE_ACCESS_KEY" description:"MinIO/S3 access key" required:"false" default:""`
+	SecretKey string `long:"storage-secret-key" env:"STORAGE_SECRET_KEY" description:"MinIO/S3 secret key" required:"false" default:""`
+	Bucket    string `long:"storage-bucket" env:"STORAGE_BUCKET" description:"MinIO/S3 bucket for reader photos" required:"false" default:"reader-photos"`
+	UseSSL    bool   `long:"storage-use-ssl" env:"STORAGE_USE_SSL" description:"use TLS for MinIO/S3 connection"`
 }
 
 func Parse(c interface{}) interface{} {

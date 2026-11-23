@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  nlrk-reader-registration-api:
-    container_name: nlrk-reader-registration-api
-    image: shaisarov/nlrk-reader-registration-api
+  nlrk-reader-registration-api-v2:
+    container_name: nlrk-reader-registration-api-v2
+    image: shaisarov/nlrk-reader-registration-api-v2
     restart: unless-stopped
     build:
       context: .
@@ -12,12 +12,16 @@ services:
         - https_proxy
         - no_proxy
     ports:
-      - "8595:8595"
+      - "18595:8595"
     environment:
       - LISTEN=:8595
       - DEBUG=1
-      - READER_GRPC_ADDRESS=nlrk-reader:8906
-      - READER_TYPE_CARD=399
+      - READER_GRPC_ADDRESS=nlrk-reader-v2:18906
+      - STORAGE_ENDPOINT=192.168.7.175:9000
+      - STORAGE_ACCESS_KEY=library-admin
+      - STORAGE_SECRET_KEY=bbe7ed01dc28a2019e9e82b88001fffd255b6caf00538eee1553a08a616fc1ee
+      - STORAGE_BUCKET=reader-photos
+      - STORAGE_USE_SSL=false
       - BASE_PATH=/
     networks:
       - web_rabis_network

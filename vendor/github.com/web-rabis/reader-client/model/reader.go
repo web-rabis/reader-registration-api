@@ -8,23 +8,24 @@ import (
 )
 
 type Reader struct {
+	GlobalTicketNumber int64         `json:"globalTicketNumber"`
 	TicketNumber       int64         `json:"ticketNumber"`
-	RFID               string        `json:"rfid"`
+	RFIDTag            string        `json:"rfidTag"`
 	Barcode            string        `json:"barcode"`
 	TypeCard           *TypeCard     `json:"typeCard"`
 	RegistrationDate   *time.Time    `json:"registrationDate"`
 	ReregistrationDate *time.Time    `json:"reregistrationDate"`
 	ExpirationDate     *time.Time    `json:"expirationDate"`
 	LastVisitDate      *time.Time    `json:"lastVisitDate"`
-	DateCorrection     *time.Time    `json:"dateCorrection"`
+	CorrectionDate     *time.Time    `json:"correctionDate"`
 	ReadersHall        string        `json:"readersHall"`
-	Status             string        `json:"status"`
-	BranchId           string        `json:"branchId"`
+	LibraryId          int64         `json:"libraryId"`
+	BranchId           int64         `json:"branchId"`
 	Iin                string        `json:"iin"`
 	Firstname          string        `json:"firstname"`
 	Middlename         string        `json:"middlename"`
 	Lastname           string        `json:"lastname"`
-	YearBirth          int64         `json:"yearBirth"`
+	BirthDateYear      *int32        `json:"birthDateYear"`
 	BirthDate          *time.Time    `json:"birthDate"`
 	Sex                *Dictionary   `json:"sex"`
 	SocialStatus       *SocialStatus `json:"socialStatus"`
@@ -42,9 +43,9 @@ type Reader struct {
 	Course             string        `json:"course"`
 	Faculty            *Dictionary   `json:"faculty"`
 	Note               string        `json:"note"`
-	PriznakUdal        string        `json:"priznakUdal"`
-	Department         string        `json:"department"`
+	Status             string        `json:"status"`
 	IsEmployee         bool          `json:"isEmployee"`
+	PhotoKey           string        `json:"photoKey"`
 }
 
 type ReaderRegistrationRequest struct {
@@ -69,9 +70,103 @@ type ReaderRegistrationRequest struct {
 	Position       string     `json:"position,omitempty"`
 	WorkPhone      string     `json:"workPhone,omitempty"`
 	AcademicDegree *int64     `json:"academicDegree,omitempty"`
-	Photo          []byte     `json:"photo,omitempty"`
+	PhotoKey       string     `json:"photoKey,omitempty"`
 }
 
+type ReaderApproveResult struct {
+	OldTicketNumber int64
+	TicketNumber    int64
+	Barcode         string
+	Status          string
+	ExpirationDate  *time.Time
+}
+
+func ReaderApproveResultFromProto(r *protobuf.ReaderApproveResponse) *ReaderApproveResult {
+	if r == nil {
+		return nil
+	}
+	var expirationDate *time.Time
+	if r.ExpirationDDate != nil {
+		t := r.ExpirationDDate.AsTime()
+		expirationDate = &t
+	}
+	return &ReaderApproveResult{
+		OldTicketNumber: r.OldTicketNumber,
+		TicketNumber:    r.TicketNumber,
+		Barcode:         r.Barcode,
+		Status:          r.Status,
+		ExpirationDate:  expirationDate,
+	}
+}
+
+func (r *Reader) ToProto() *protobuf.Reader {
+	if r == nil {
+		return nil
+	}
+	var registrationDate *timestamppb.Timestamp
+	if r.RegistrationDate != nil {
+		registrationDate = timestamppb.New(*r.RegistrationDate)
+	}
+	var reregistrationDate *timestamppb.Timestamp
+	if r.ReregistrationDate != nil {
+		reregistrationDate = timestamppb.New(*r.ReregistrationDate)
+	}
+	var expirationDate *timestamppb.Timestamp
+	if r.ExpirationDate != nil {
+		expirationDate = timestamppb.New(*r.ExpirationDate)
+	}
+	var lastVisitDate *timestamppb.Timestamp
+	if r.LastVisitDate != nil {
+		lastVisitDate = timestamppb.New(*r.LastVisitDate)
+	}
+	var correctionDate *timestamppb.Timestamp
+	if r.CorrectionDate != nil {
+		correctionDate = timestamppb.New(*r.CorrectionDate)
+	}
+	var birthDate *timestamppb.Timestamp
+	if r.BirthDate != nil {
+		birthDate = timestamppb.New(*r.BirthDate)
+	}
+	return &protobuf.Reader{
+		TicketNumber:       r.TicketNumber,
+		RfidTag:            r.RFIDTag,
+		Barcode:            r.Barcode,
+		TypeCard:           r.TypeCard.ToProto(),
+		RegistrationDate:   registrationDate,
+		ReregistrationDate: reregistrationDate,
+		ExpirationDate:     expirationDate,
+		LastVisitDate:      lastVisitDate,
+		CorrectionDate:     correctionDate,
+		ReadersHall:        r.ReadersHall,
+		LibraryId:          r.LibraryId,
+		BranchId:           r.BranchId,
+		Iin:                r.Iin,
+		Firstname:          r.Firstname,
+		Middlename:         r.Middlename,
+		Lastname:           r.Lastname,
+		BirthDateYear:      r.BirthDateYear,
+		BirthDate:          birthDate,
+		Sex:                r.Sex.ToProto(),
+		SocialStatus:       r.SocialStatus.ToProto(),
+		Nationality:        r.Nationality.ToProto(),
+		Speciality:         r.Speciality.ToProto(),
+		Address:            r.Address,
+		Email:              r.Email,
+		Phone:              r.Phone,
+		WorkPhone:          r.WorkPhone,
+		Education:          r.Education.ToProto(),
+		PlaceEmployment:    r.PlaceEmployment,
+		Position:           r.Position,
+		Institution:        r.Institution.ToProto(),
+		AcademicDegree:     r.AcademicDegree.ToProto(),
+		Course:             r.Course,
+		Faculty:            r.Faculty.ToProto(),
+		Note:               r.Note,
+		Status:             r.Status,
+		IsEmployee:         r.IsEmployee,
+		PhotoKey:           r.PhotoKey,
+	}
+}
 func ReaderFromProto(r *protobuf.Reader) *Reader {
 	if r == nil {
 		return nil
@@ -80,7 +175,7 @@ func ReaderFromProto(r *protobuf.Reader) *Reader {
 	var reregistrationdate *time.Time
 	var expirationdate *time.Time
 	var lastvisitdate *time.Time
-	var datecorrection *time.Time
+	var correctiondate *time.Time
 	var birthdate *time.Time
 	if r.RegistrationDate != nil {
 		t := r.RegistrationDate.AsTime()
@@ -98,32 +193,33 @@ func ReaderFromProto(r *protobuf.Reader) *Reader {
 		t := r.LastVisitDate.AsTime()
 		lastvisitdate = &t
 	}
-	if r.DateCorrection != nil {
-		t := r.DateCorrection.AsTime()
-		datecorrection = &t
+	if r.CorrectionDate != nil {
+		t := r.CorrectionDate.AsTime()
+		correctiondate = &t
 	}
-	if birthdate != nil {
+	if r.BirthDate != nil {
 		t := r.BirthDate.AsTime()
 		birthdate = &t
 	}
 	return &Reader{
+		GlobalTicketNumber: r.GlobalTicketNumber,
 		TicketNumber:       r.TicketNumber,
-		RFID:               r.Rfid,
+		RFIDTag:            r.RfidTag,
 		Barcode:            r.Barcode,
 		TypeCard:           TypeCardFromProto(r.TypeCard),
 		RegistrationDate:   registrationdate,
 		ReregistrationDate: reregistrationdate,
 		ExpirationDate:     expirationdate,
 		LastVisitDate:      lastvisitdate,
-		DateCorrection:     datecorrection,
+		CorrectionDate:     correctiondate,
 		ReadersHall:        r.ReadersHall,
-		Status:             r.Status,
+		LibraryId:          r.LibraryId,
 		BranchId:           r.BranchId,
 		Iin:                r.Iin,
 		Firstname:          r.Firstname,
 		Middlename:         r.Middlename,
 		Lastname:           r.Lastname,
-		YearBirth:          r.YearBirth,
+		BirthDateYear:      r.BirthDateYear,
 		BirthDate:          birthdate,
 		Sex:                DictionaryFromProto(r.Sex),
 		SocialStatus:       SocialStatusFromProto(r.SocialStatus),
@@ -141,10 +237,17 @@ func ReaderFromProto(r *protobuf.Reader) *Reader {
 		Course:             r.Course,
 		Faculty:            DictionaryFromProto(r.Faculty),
 		Note:               r.Note,
-		PriznakUdal:        r.PriznakUdal,
-		Department:         r.Department,
+		Status:             r.Status,
 		IsEmployee:         r.IsEmployee,
+		PhotoKey:           r.PhotoKey,
 	}
+}
+func ReaderListFromProto(l []*protobuf.Reader) []*Reader {
+	list := make([]*Reader, len(l))
+	for i, d := range l {
+		list[i] = ReaderFromProto(d)
+	}
+	return list
 }
 
 func (r *ReaderRegistrationRequest) ToProto() *protobuf.ReaderRegistrationRequest {
@@ -177,14 +280,5 @@ func (r *ReaderRegistrationRequest) ToProto() *protobuf.ReaderRegistrationReques
 		Position:       r.Position,
 		WorkPhone:      r.WorkPhone,
 		AcademicDegree: r.AcademicDegree,
-		Photo:          r.Photo,
 	}
-}
-
-func ReaderListFromProto(l []*protobuf.Reader) []*Reader {
-	list := make([]*Reader, len(l))
-	for i, d := range l {
-		list[i] = ReaderFromProto(d)
-	}
-	return list
 }

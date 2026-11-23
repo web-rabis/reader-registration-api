@@ -13,6 +13,7 @@ import (
 
 	readerclient "github.com/web-rabis/reader-client"
 	readerclientmodel "github.com/web-rabis/reader-client/model"
+	storageminio "github.com/web-rabis/reader-registration-api/internal/adapter/storage/minio"
 	"github.com/web-rabis/reader-registration-api/internal/config"
 	"github.com/web-rabis/reader-registration-api/internal/manager/dictionary"
 	"github.com/web-rabis/reader-registration-api/internal/manager/reader"
@@ -58,8 +59,22 @@ func main() {
 	}()
 	log.Printf("[INFO] connected to reader grpc-server(%s)", opts.ReaderConfig.GrpcAddress)
 
+	photoStorage, err := storageminio.New(
+		opts.StorageConfig.Endpoint,
+		opts.StorageConfig.AccessKey,
+		opts.StorageConfig.SecretKey,
+		opts.StorageConfig.Bucket,
+		opts.StorageConfig.UseSSL,
+	)
+	if err != nil {
+		panic(err)
+	}
+	if err := photoStorage.EnsureBucket(appCtx); err != nil {
+		panic(err)
+	}
+
 	dictMan := dictionary.NewCachingManager(dictionary.NewManager(readerCli.DictionarySvc()))
-	readerMan := reader.NewManager(readerCli.ReaderSvc())
+	readerMan := reader.NewManager(readerCli.ReaderSvc(), photoStorage)
 	servers, serversCtx := errgroup.WithContext(appCtx)
 
 	servers.Go(func() error {

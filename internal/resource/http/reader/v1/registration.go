@@ -43,12 +43,12 @@ func (res *Resource) registrationReader(w http.ResponseWriter, r *http.Request) 
 		_ = render.Render(w, r, httperrors.Internal(err))
 		return
 	}
-	req, err := request.ReaderRegistrationRequest(res.readerTypeCard, photoBytes)
+	req, err := request.ReaderRegistrationRequest()
 	if err != nil {
 		_ = render.Render(w, r, httperrors.Internal(err))
 		return
 	}
-	ticketNumber, status, err := res.readerMan.ReaderRegistration(ctx, req)
+	ticketNumber, status, err := res.readerMan.ReaderRegistration(ctx, req, photoBytes)
 	if err != nil {
 		_ = render.Render(w, r, httperrors.Internal(err))
 		return
