@@ -141,9 +141,6 @@ message VisitCheckInRequest {
   User user = 2;
 }
 message VisitCheckOutRequest {
-  reserved 3; // orders_count - нигде не читалось (visit больше не хранит
-              // метрики по заказам, см. migrations/000001_init.up.sql)
-  reserved "orders_count";
   int64 ticket_number = 1;
   User user = 2;
 }

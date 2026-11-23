@@ -14,7 +14,7 @@ require (
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.4
 	github.com/web-rabis/httperrors v0.0.0-20230828182436-93be23854738
-	github.com/web-rabis/reader-client v0.0.0-20261009114604-a1169b2db7c1
+	github.com/web-rabis/reader-client v0.1.0-beta1
 	github.com/web-rabis/servers v0.0.0-20230808095603-66994ba613c7
 	golang.org/x/sync v0.23.0
 )
@@ -53,5 +53,3 @@ require (
 	gopkg.in/ini.v1 v1.67.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
-
-replace github.com/web-rabis/reader-client => ../reader-client

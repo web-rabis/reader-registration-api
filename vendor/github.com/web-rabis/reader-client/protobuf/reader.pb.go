@@ -1630,10 +1630,10 @@ const file_protobuf_reader_proto_rawDesc = "" +
 	"\auser_id\x18\x05 \x01(\x03R\x06userId\"\\\n" +
 	"\x13VisitCheckInRequest\x12#\n" +
 	"\rticket_number\x18\x01 \x01(\x03R\fticketNumber\x12 \n" +
-	"\x04user\x18\x02 \x01(\v2\f.reader.UserR\x04user\"q\n" +
+	"\x04user\x18\x02 \x01(\v2\f.reader.UserR\x04user\"]\n" +
 	"\x14VisitCheckOutRequest\x12#\n" +
 	"\rticket_number\x18\x01 \x01(\x03R\fticketNumber\x12 \n" +
-	"\x04user\x18\x02 \x01(\v2\f.reader.UserR\x04userJ\x04\b\x03\x10\x04R\forders_count\"i\n" +
+	"\x04user\x18\x02 \x01(\v2\f.reader.UserR\x04user\"i\n" +
 	"\x10VisitListRequest\x12-\n" +
 	"\afilters\x18\x01 \x01(\v2\x13.reader.VisitFilterR\afilters\x12&\n" +
 	"\x06paging\x18\x02 \x01(\v2\x0e.reader.PagingR\x06paging\"P\n" +

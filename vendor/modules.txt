@@ -109,7 +109,7 @@ github.com/tinylib/msgp/msgp/setof
 # github.com/web-rabis/httperrors v0.0.0-20230828182436-93be23854738
 ## explicit; go 1.18
 github.com/web-rabis/httperrors
-# github.com/web-rabis/reader-client v0.0.0-20261009114604-a1169b2db7c1 => ../reader-client
+# github.com/web-rabis/reader-client v0.1.0-beta1
 ## explicit; go 1.26.0
 github.com/web-rabis/reader-client
 github.com/web-rabis/reader-client/client
@@ -279,4 +279,3 @@ gopkg.in/ini.v1
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2
-# github.com/web-rabis/reader-client => ../reader-client

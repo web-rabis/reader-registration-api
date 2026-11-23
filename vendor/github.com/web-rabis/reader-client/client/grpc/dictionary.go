@@ -94,7 +94,7 @@ func (d DictionaryService) SocialStatusList(ctx context.Context, paging *model.P
 }
 
 func (d DictionaryService) SpecialityList(ctx context.Context, paging *model.Paging) (int64, []*model.Dictionary, error) {
-	response, err := d.client.SexList(ctx, dictionaryListRequest(paging))
+	response, err := d.client.SpecialityList(ctx, dictionaryListRequest(paging))
 	switch status.Code(err) {
 	case codes.OK:
 		return response.Count, model.DictionaryListFromProto(response.Result), nil
@@ -111,6 +111,16 @@ func (d DictionaryService) TypeCardList(ctx context.Context, paging *model.Pagin
 		return response.Count, model.TypeCardListFromProto(response.Result), nil
 	default:
 		return 0, nil, err
+	}
+}
+
+func (d DictionaryService) TypeCardById(ctx context.Context, id int64) (*model.TypeCard, error) {
+	response, err := d.client.TypeCardById(ctx, &protobuf.EntityByIdRequest{Id: id})
+	switch status.Code(err) {
+	case codes.OK:
+		return model.TypeCardFromProto(response), nil
+	default:
+		return nil, err
 	}
 }
 
