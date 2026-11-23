@@ -16,7 +16,7 @@ services:
     environment:
       - LISTEN=:8595
       - DEBUG=1
-      - READER_GRPC_ADDRESS=nlrk-reader-v2:18906
+      - READER_GRPC_ADDRESS=nlrk-reader-v2:8906
       - STORAGE_ENDPOINT=192.168.7.175:9000
       - STORAGE_ACCESS_KEY=library-admin
       - STORAGE_SECRET_KEY=bbe7ed01dc28a2019e9e82b88001fffd255b6caf00538eee1553a08a616fc1ee
